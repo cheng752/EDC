@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EDC</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Khmer&display=swap");
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f7f7f7;
+      }
+      .form-container {
+        max-width: 700px;
+        margin: auto;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .form-container h1 {
+        text-align: center;
+        color: #5c99e8;
+        
+      }
+      
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      .form-group input,
+      .form-group select {
+        font-family: "Khmer", sans-serif;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .form-group .checkbox-group {
+        display: flex;
+        align-items: center;
+      }
+      .form-group .checkbox-group input {
+        width: auto;
+        margin-right: 10px;
+      }
+      .btn-container {
+        display: flex;
+        gap: 10px;
+      }
+      .btn-submit {
+        font-family: "Khmer", sans-serif;
+        font-size: 10px;
+        background-color: #5ce86a;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn-submit:hover {
+        background-color: #5ce86a;
+      }
+      .btn-clear {
+        font-family: "Khmer", sans-serif;
+        font-size: 10px;
+        background-color: #d9534f;
+        color:#fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn-clear:hover {
+        background-color: #c9302c;
+      }
+      .output {
+        width: 400px;
+        height: 300px;
+        margin-top: 20px;
+        padding: 15px;
+        background: #d8d7d7;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .output p {
+        margin: 5px 0;
+        font-family: "Khmer", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <img src="logo.png" alt="" style="width: 96px; float: left" />
+      <h1>Electricite Du Cambodge</h1><br/>
+      <h1>អគ្គិសនី កម្ពុជា</h1>
+      <div class="btn-container" style="float: right; margin-top: 20px">
+        <button type="button" class="btn-submit" onclick="calculateCost()">
+          គណនា
+        </button>
+        <button type="button" class="btn-clear" onclick="clearForm()">
+          សំអាត
+        </button>
+      </div>
+      <form id="edc-form">
+        <div class="form-group" style="margin-top: 80px">
+          <div
+            class="output"
+            id="output"
+            style="float: right; margin-top: 20px; height: 370px;"
+          ></div>
+          <label for="account-number">លេខអតិថិជន</label>
+          <input
+            type="text"
+            id="account-number"
+            placeholder="បញ្ចូលលេខអតិថិជន"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-name">ឈ្មោះអតិថិជន</label>
+          <input
+            type="text"
+            id="customer-name"
+            placeholder="បញ្ចូល​ឈ្មោះអតិថិជន"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="electricity-used-old">អំណាចចាស់ (kWh)</label>
+          <input
+            type="number"
+            id="electricity-used-old"
+            placeholder="បញ្ចូលអំណាចចាស់"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="electricity-used-new">អំណាចថ្មី (kWh)</label>
+          <input
+            type="number"
+            id="electricity-used-new"
+            placeholder="បញ្ចូលអំណាចថ្មី"
+            required
+          />
+        </div>
+        <div class="form-group checkbox-group">
+          <input
+            style="float: left"
+            type="checkbox"
+            id="include-service-fee"
+            onclick="toggleServiceFee()"
+          />
+          <label for="include-service-fee">ថ្លៃសំរាម</label>
+        </div>
+        <div class="form-group" id="service-fee-group" style="display: none">
+          <select id="service-fee" style="width: 208px">
+            <option value="10000">10,000 R</option>
+            <option value="20000">20,000 R</option>
+            <option value="30000">30,000 R</option>
+          </select>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      window.onload = function () {
+        alert("Welcome to Electricite Du Cambodge!");
+
+        const accountNumber = prompt("សូមមេត្តាបញ្ចូលលេខអតិថិជន:");
+        if (accountNumber)
+          document.getElementById("account-number").value = accountNumber;
+
+        const customerName = prompt("សូមមេត្តាបញ្ចូលឈ្មោះអតិថិជន:");
+        if (customerName)
+          document.getElementById("customer-name").value = customerName;
+
+        const electricityUsedOld = prompt("សូមមេត្តាបញ្ចូលអំណាចចាស់ (kWh):");
+        if (electricityUsedOld)
+          document.getElementById("electricity-used-old").value =
+            electricityUsedOld;
+
+        const electricityUsedNew = prompt("សូមមេត្តាបញ្ចូលអំណាចថ្មី (kWh):");
+        if (electricityUsedNew)
+          document.getElementById("electricity-used-new").value =
+            electricityUsedNew;
+
+        const includeServiceFee = confirm("តើអ្នកចង់បញ្ចូលថ្លៃសំរាមដែរឬទេ?");
+        document.getElementById("include-service-fee").checked =
+          includeServiceFee;
+
+        if (includeServiceFee) {
+          const serviceFee = prompt(
+            "ជ្រើសរើសថ្លៃសំរាម (Enter 10000, 20000, or 30000):"
+          );
+          const serviceFeeSelect = document.getElementById("service-fee");
+          if (
+            serviceFee === "10000" ||
+            serviceFee === "20000" ||
+            serviceFee === "30000"
+          ) {
+            serviceFeeSelect.value = serviceFee;
+          }
+          toggleServiceFee();
+        }
+      };
+
+      function toggleServiceFee() {
+        const serviceFeeGroup = document.getElementById("service-fee-group");
+        const includeServiceFee = document.getElementById(
+          "include-service-fee"
+        );
+        serviceFeeGroup.style.display = includeServiceFee.checked
+          ? "block"
+          : "none";
+      }
+
+      function calculateCost() {
+        const customerName = document.getElementById("customer-name").value;
+        const accountNumber = document.getElementById("account-number").value;
+        const electricityUsedOld = parseFloat(
+          document.getElementById("electricity-used-old").value
+        );
+        const electricityUsedNew = parseFloat(
+          document.getElementById("electricity-used-new").value
+        );
+        const includeServiceFee = document.getElementById(
+          "include-service-fee"
+        ).checked;
+        const serviceFee = includeServiceFee
+          ? parseFloat(document.getElementById("service-fee").value)
+          : 0;
+
+        if (
+          !customerName ||
+          !accountNumber ||
+          isNaN(electricityUsedOld) ||
+          isNaN(electricityUsedNew)
+        ) {
+          alert("Please fill in all fields correctly.");
+          return;
+        }
+
+        const costOld = calculateCostPerKwh(electricityUsedOld);
+        const costNew = calculateCostPerKwh(electricityUsedNew);
+        const totalCost = costNew + serviceFee;
+
+        const output = document.getElementById("output");
+        output.innerHTML = `
+                <img style="width:40px; height:40px;" src="logo.png" >
+                <h3 style="text-align: center; color: #5c99e8; transform: translateY(-60px); ">Electricite Du Cambodge</h3><br/>
+                <h3 style="text-align: center; color: #5c99e8; transform: translateY(-100px);">អគ្គិសនី កម្ពុជា</h3>
+                <p style="transform: translateY(-70px);"><strong>លេខអតិថិជន:</strong> ${accountNumber}</p>
+                <p style="transform: translateY(-70px);"><strong>ឈ្មោះអតិថិជន:</strong> ${customerName}</p>
+                <p style="transform: translateY(-70px);"><strong>អំណាចចាស់ (kWh):</strong> ${electricityUsedOld} kWh (តម្លៃប្រាក់ចាស់: ${costOld.toLocaleString()} R)</p>
+                <p style="transform: translateY(-70px);"><strong>អំណាចថ្មី (kWh):</strong> ${electricityUsedNew} kWh (តម្លៃប្រាក់ថ្មី: ${costNew.toLocaleString()} R)</p>
+                ${
+                  includeServiceFee
+                    ? `<p><strong>ថ្លៃសំរាម:</strong> ${serviceFee.toLocaleString()} R</p>`
+                    : ""
+                }
+                <p style="transform: translateY(-70px);"><strong>ទឹកប្រាក់សរុប:</strong> ${totalCost.toLocaleString()} R</p>
+            `;
+      }
+
+      function calculateCostPerKwh(usageKwh) {
+        if (usageKwh <= 50) return usageKwh * 500;
+        else if (usageKwh <= 100) return usageKwh * 1000;
+        else if (usageKwh <= 150) return usageKwh * 1500;
+        else if (usageKwh <= 200) return usageKwh * 2000;
+        else return usageKwh * 2500;
+      }
+
+      function clearForm() {
+        document.getElementById("edc-form").reset();
+        toggleServiceFee();
+        document.getElementById("output").innerHTML = "";
+      }
+    </script>
+  </body>
+</html>
